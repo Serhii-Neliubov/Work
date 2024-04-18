@@ -9,13 +9,12 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "./App.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import pin from "/pin.png";
+import pin from "./assets/images/pin.png";
+import logo from "./assets/images/WISE_MAPPING_LOGO.png";
 // Components
-import SubMenu from "./components/SubMenu/SubMenu.jsx";
 import ResetMap from "./components/ResetMap.jsx";
 import PrintScreen from "./components/PrintScreen.jsx";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton.jsx";
-import MyLoader from "./components/MyLoader/MyLoader.jsx";
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
@@ -82,7 +81,6 @@ function App() {
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const circleMenu = useRef();
-  const submenuTag = useRef();
   const mapTag = useRef();
   const colorPicker = useRef();
   const geocoderContainer = useRef();
@@ -651,6 +649,7 @@ function App() {
   useEffect(() => {
     if (map) {
       const customMarker = document.createElement('div');
+      customMarker.className = 'custom-marker';
       customMarker.style.backgroundImage = `url(${pin})`;
       customMarker.style.backgroundPosition = 'center';
 
@@ -889,11 +888,15 @@ function App() {
 
   return (
     <Fragment>
-      {showLoader && <MyLoader />}
+      {showLoader &&
+          <div className="loading__img">
+            <img src={logo} alt="loading"/>
+          </div>
+      }
       <Container>
         <button
-          ref={sidebarButton}
-          className="activeSidebar"
+            ref={sidebarButton}
+            className="activeSidebar"
           onClick={toggleSidebar}
         />
         <button
@@ -905,11 +908,10 @@ function App() {
         </button>
 
         <div ref={sidebar} className="sidebar">
-          <img className="logo" src="/logo-sidebar.png" alt='Image' />
+          <img className="logo" src={logo} alt='Image' />
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
-              <SubMenu map={map} submenuTag={submenuTag} />
               <OpenMapStyleButton
                 setShowCadastre={setShowCadastre}
                 setSelectedDistricts={setSelectedDistricts}
@@ -1001,7 +1003,7 @@ function App() {
             className="circleMenu"
             alt="logo"
           />
-          <img alt="Logo" className="logo-map" src="/old/src/assets/images/logo.png" />
+          <img alt="Logo" className="logo-map" src={logo} />
         </div>
       </Container>
     </Fragment>

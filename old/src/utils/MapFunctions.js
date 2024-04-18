@@ -8,6 +8,8 @@ export function removeCustomMarker() {
   }
 }
 
+import pin from "../assets/images/pin.png";
+
 export function createMarkerElement() {
   let container = document.createElement("div");
   container.className = "deleteCustomMarkerContainer";
@@ -15,7 +17,7 @@ export function createMarkerElement() {
   // Создайте элемент маркера
   let marker = document.createElement("div");
   marker.className = "custom-marker";
-  marker.style.backgroundImage = "url(pin.png)";
+  marker.style.backgroundImage = `url(${pin})`;
   marker.style.width = "50px";
   marker.style.height = "50px";
   marker.draggable = true;

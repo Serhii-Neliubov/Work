@@ -229,7 +229,7 @@ export const Sidebar = ({map}: SidebarProps) => {
       }).then(canvas => {
         const a = document.createElement("a");
         document.body.appendChild(a);
-        a.download = "test.png";
+        a.download = "image.png";
         a.href = canvas.toDataURL();
         a.click();
       });

@@ -14,6 +14,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { MAPBOX_DRAW_STYLES } from "@/assets/data/mapbox-draw-styles.ts";
 import {ColorPicker} from "@/components/color-picker/ColorPicker.tsx";
 import {Bg} from "@/components/ui/bg.tsx";
+import {Test} from "@/Test.tsx";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
@@ -201,6 +202,7 @@ function App() {
   return (
     <div className='w-screen relative bg-[#001524] overflow-hidden h-screen pt-[50px] pr-[50px] pb-[50px]'>
       <Bg />
+      <Test />
       <Sidebar map={map}/>
       <CalculationBox map={map} draw={draw}/>
       <ColorPicker draw={draw}/>
