@@ -659,11 +659,11 @@ function App() {
             if (error) throw error;
             if (!image) return; // handle undefined case
             map.addImage('custom-marker', image);
-            map.addLayer({
-              id: 'point',
-              source: 'single-point',
-              type: 'symbol',
-            });
+            // map.addLayer({
+            //   id: 'point',
+            //   source: 'single-point',
+            //   type: 'symbol',
+            // });
           }
     );
     }
