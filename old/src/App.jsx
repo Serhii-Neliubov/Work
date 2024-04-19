@@ -55,6 +55,7 @@ import CircleMenu from "./components/CircleMenu";
 import OpenTranportButton from "./components/ToggleMenu/OpenTranportButton.jsx";
 import OpenCadastreButton from "./components/ToggleMenu/OpenCadastreButton.jsx";
 import OpenMapStyleButton from "./components/ToggleMenu/OpenMapStyleButton.jsx";
+import ToolsButton from "./components/ToolsButton.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -908,57 +909,60 @@ function App() {
         </button>
 
         <div ref={sidebar} className="sidebar">
-          <img className="logo" src={logo} alt='Image' />
+          <div className="logo">
+            <img src={logo} alt='Image'/>
+          </div>
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
+              <ToolsButton map={map} draw={draw} />
               <OpenMapStyleButton
-                setShowCadastre={setShowCadastre}
-                setSelectedDistricts={setSelectedDistricts}
-                map={map}
-                mapStyleSetter={mapStyleSetter}
-                setMapStyleSetter={setMapStyleSetter}
+                  setShowCadastre={setShowCadastre}
+                  setSelectedDistricts={setSelectedDistricts}
+                  map={map}
+                  mapStyleSetter={mapStyleSetter}
+                  setMapStyleSetter={setMapStyleSetter}
               />
               <button
-                onClick={() => dispatch(openBrusselsChanging())}
-                className={`BrusselsButton BrusselsButton_bg ${
-                  openBrussels ? "BrusselsButton_open" : ""
-                }`}
+                  onClick={() => dispatch(openBrusselsChanging())}
+                  className={`BrusselsButton BrusselsButton_bg ${
+                      openBrussels ? "BrusselsButton_open" : ""
+                  }`}
               >
                 Brussels
               </button>
               {openBrussels ? (
-                <div className="toggleContainer">
-                  <ToggleMenu
-                    toggleButton={toggleButton}
-                    map={map}
-                    selectedDistricts={selectedDistricts}
-                    centralisedDistrictsButtonHandler={
-                      centralisedDistrictsButtonHandler
-                    }
-                    decentralisedDistrictsButtonHandler={
-                      decentralisedDistrictsButtonHandler
-                    }
-                  />
-                  <AllDistrictsButton
-                    allDistrictsButtonHandler={allDistrictsButtonHandler}
-                  >
-                    All Districts
-                  </AllDistrictsButton>
-                </div>
+                  <div className="toggleContainer">
+                    <ToggleMenu
+                        toggleButton={toggleButton}
+                        map={map}
+                        selectedDistricts={selectedDistricts}
+                        centralisedDistrictsButtonHandler={
+                          centralisedDistrictsButtonHandler
+                        }
+                        decentralisedDistrictsButtonHandler={
+                          decentralisedDistrictsButtonHandler
+                        }
+                    />
+                    <AllDistrictsButton
+                        allDistrictsButtonHandler={allDistrictsButtonHandler}
+                    >
+                      All Districts
+                    </AllDistrictsButton>
+                  </div>
               ) : null}
-              <OpenTranportButton map={map} />
+              <OpenTranportButton map={map}/>
               <OpenCadastreButton
-                showCadastre={showCadastre}
-                setShowCadastre={setShowCadastre}
-                map={map}
+                  showCadastre={showCadastre}
+                  setShowCadastre={setShowCadastre}
+                  map={map}
               />
             </div>
             <div className="down-sidebar__buttons">
               <ResetMap
-                setSelectedFeatures={setSelectedFeatures}
-                mapStyleSetter={mapStyleSetter}
-                setSqml={setSqml}
+                  setSelectedFeatures={setSelectedFeatures}
+                  mapStyleSetter={mapStyleSetter}
+                  setSqml={setSqml}
                 draw={draw}
                 map={map}
                 setShowCadastre={setShowCadastre}

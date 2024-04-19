@@ -974,8 +974,12 @@ input[type="color"]::-webkit-color-swatch {
   margin-bottom: 30px !important;
 }
 .logo {
-  margin: 45px 0 50px 0;
   width: 300px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.logo > img{
+  width: 120px;
 }
 .calculation-box {
   padding: 10px;
