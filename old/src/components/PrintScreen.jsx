@@ -1,9 +1,8 @@
 import html2canvas from "html2canvas";
 
-const PrintScreen = ({showTool, toggleToolbar}) => {
+const PrintScreen = () => {
   function downloadMapHandler() {
     const mapElement = document.getElementById('map');
-    if(!showTool) toggleToolbar();
 
     if (mapElement) {
       html2canvas(mapElement, {
@@ -11,7 +10,6 @@ const PrintScreen = ({showTool, toggleToolbar}) => {
         allowTaint: true
       }).then(canvas => {
 
-        console.log(showTool);
         const a = document.createElement("a");
         document.body.appendChild(a);
         a.download = "test.png";

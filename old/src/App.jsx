@@ -51,7 +51,6 @@ import {
   decentralisedToggleTrue,
 } from "./redux/slices/decentralisedToggleSlice";
 import Container from "./components/Container.jsx";
-import CircleMenu from "./components/CircleMenu";
 import OpenTranportButton from "./components/ToggleMenu/OpenTranportButton.jsx";
 import OpenCadastreButton from "./components/ToggleMenu/OpenCadastreButton.jsx";
 import OpenMapStyleButton from "./components/ToggleMenu/OpenMapStyleButton.jsx";
@@ -67,7 +66,6 @@ function App() {
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
   const [showCadastre, setShowCadastre] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
-  const [showTool, setShowTool] = useState(true);
   const [showCircleMenu, setShowCircleMenu] = useState(true);
 
   const isCentralisedDistrictsVisible = useSelector(
@@ -87,10 +85,8 @@ function App() {
   const geocoderContainer = useRef();
   const newDrawFeature = useRef(false);
   const sidebarButton = useRef();
-  const palette = document.querySelector(".palette");
   const circleMenuTool = document.querySelector(".circleMenuTool");
   const sidebar = useRef();
-  const toolbarButton = useRef();
   const allDistricts = [
     "SW",
     "SE",
@@ -414,8 +410,6 @@ function App() {
     });
 
     var draw = new MapboxDraw({
-      // this is used to allow for custom properties for styling
-      // it appends the word "user_" to the property
       userProperties: true,
       controls: {
         combine_features: false,
@@ -424,6 +418,28 @@ function App() {
       marker: false,
       styles: defaultDrawStyles,
     });
+
+
+    const drawAdapter = {
+      onAdd: function (map){
+          const container = document.getElementById("toolsContainer");
+          const sidebar = document.getElementsByClassName("mainToggleButtons");
+          const mapContainer = draw.onAdd(map);
+
+          container.appendChild(mapContainer);
+          sidebar[0].appendChild(container);
+
+          console.log(container);
+          console.log(mapContainer);
+
+          return sidebar;
+      },
+      onRemove: function (map){
+        return draw.onRemove(map);
+      },
+    }
+
+    console.log(draw);
 
     function addLayerIfAbsent(map, layer) {
       if (!map.getLayer(layer.id)) {
@@ -453,7 +469,7 @@ function App() {
     map.on("load", function () {
       addLayerIfAbsent(map, customTilesetLayer);
       addLayerIfAbsent(map, customTilesetLineLayer);
-      map.addControl(draw);
+      map.addControl(drawAdapter);
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
 
@@ -734,24 +750,6 @@ function App() {
     sidebarButton.current.classList.toggle("closeSidebar");
   }
 
-  function toggleToolbar() {
-    const elements = document.querySelectorAll(".mapboxgl-ctrl-group");
-    const lastElement = elements[elements.length - 1];
-    setShowTool(!showTool);
-
-    if (showTool) {
-      lastElement.style.display = "flex";
-      palette.style.display = "block";
-      circleMenu.current.style.display = "block";
-    } else {
-      lastElement.style.display = "none";
-      palette.style.display = "none";
-      circleMenu.current.style.display = "none";
-      circleMenuTool.style.display = "none";
-      setShowCircleMenu(true);
-    }
-  }
-
   function decentralisedDistrictsButtonHandler() {
     if (isDecentralisedDistrictsVisible) {
       dispatch(centralisedToggleFalse());
@@ -787,106 +785,6 @@ function App() {
     }
   }, [activeSidebar, map]);
 
-  useEffect(() => {
-    if (map) {
-      map.on("load", () => {
-        document
-          .querySelector(".mapboxgl-ctrl-group")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-north").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".mapboxgl-ctrl-group")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-north").style.display =
-              "none";
-          });
-        document
-          .querySelector(".circleMenu")
-          .addEventListener("mouseover", function () {
-            document.querySelector(
-              ".rightTopMenu-button-circleMenu"
-            ).style.display = "unset";
-          });
-        document
-          .querySelector(".circleMenu")
-          .addEventListener("mouseout", function () {
-            document.querySelector(
-              ".rightTopMenu-button-circleMenu"
-            ).style.display = "none";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_line")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-line").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_line")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-line").style.display =
-              "none";
-          });
-
-        document
-          .querySelector(".mapbox-gl-draw_polygon")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-shape").style.display =
-              "unset";
-          });
-
-        document
-          .querySelector(".mapbox-gl-draw_polygon")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-shape").style.display =
-              "none";
-          });
-
-        document
-          .querySelector(".mapbox-gl-draw_point")
-          .addEventListener("mouseover", function () {
-            document.querySelector(
-              ".rightTopMenu-button-location"
-            ).style.display = "unset";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_point")
-          .addEventListener("mouseout", function () {
-            document.querySelector(
-              ".rightTopMenu-button-location"
-            ).style.display = "none";
-          });
-
-        document
-          .querySelector(".mapbox-gl-draw_trash")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-erase").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_trash")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-erase").style.display =
-              "none";
-          });
-
-        document
-          .querySelector(".palette")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-color").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".palette")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-color").style.display =
-              "none";
-          });
-      });
-    }
-  }, [draw, map]);
-
   return (
     <Fragment>
       {showLoader &&
@@ -900,13 +798,6 @@ function App() {
             className="activeSidebar"
           onClick={toggleSidebar}
         />
-        <button
-          ref={toolbarButton}
-          className="activeToolbar"
-          onClick={toggleToolbar}
-        >
-          Tools
-        </button>
 
         <div ref={sidebar} className="sidebar">
           <div className="logo">
@@ -915,7 +806,7 @@ function App() {
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
-              <ToolsButton map={map} draw={draw} />
+              <ToolsButton colorPicker={colorPicker} changeColor={changeColor}/>
               <OpenMapStyleButton
                   setShowCadastre={setShowCadastre}
                   setSelectedDistricts={setSelectedDistricts}
@@ -970,7 +861,7 @@ function App() {
                 setSelectedDistricts={setSelectedDistricts}
               ></ResetMap>
 
-              <PrintScreen showTool={showTool} toggleToolbar={toggleToolbar} />
+              <PrintScreen />
             </div>
           </div>
         </div>
@@ -983,7 +874,6 @@ function App() {
             position: "relative",
           }}
         >
-          <CircleMenu map={map} />
           <div id="distance-marker" className="distance-marker">
             <div id="distance-value"></div>
             <div className="distance-close" id="distance-close">
@@ -994,13 +884,6 @@ function App() {
           <div className="calculation-box">
             <div id="calculated-area">{Sqm}.SQM</div>
           </div>
-          <input
-            type="color"
-            ref={colorPicker}
-            id="colorPicker"
-            className="palette"
-            onChange={changeColor}
-          />
           <div
             ref={circleMenu}
             onClick={circleToggleMenu}

@@ -724,7 +724,6 @@ body {
   height: 45px;
   align-items: center;
   position: absolute;
-  display: none;
   bottom: 15px;
   right: calc(var(--myRightValue) + var(--myOffset));
 }
@@ -828,18 +827,12 @@ body {
   --myOffset3: -233px;
 }
 .palette {
-  border: none;
-  display: none;
-  width: 45px;
+  margin-top: 200px;
   height: 45px;
-  position: absolute;
-  background: #0f293a;
-  bottom: 15px;
-  right: calc(var(--myRightValue3) + var(--myOffset3));
+  background: none;
+  border: none;
   cursor: pointer;
-  border-radius: 0px 8px 8px 0;
-
-  z-index: 15;
+  position: relative;
 }
 .palette::after {
   content: "";
@@ -1141,6 +1134,22 @@ p {
   border-radius: 10px;
   margin-bottom: 15px;
   width: 360px;
+}
+#toolsContainer{
+  position: relative;
+  z-index: 9999 !important;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  width: 360px;
+}
+.mapboxgl-ctrl {
+  position: absolute;
+  box-shadow: none !important;
+  top: 0;
+  left: 0;
+  border-radius: 8px !important;
+  background: none !important;
 }
 .mapStyleButton_open::after {
   transform: rotate(90deg) !important;

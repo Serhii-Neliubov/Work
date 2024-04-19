@@ -1,7 +1,7 @@
 import {Fragment, useState} from "react";
 
-export default function ToolsButton() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function ToolsButton({colorPicker, changeColor}) {
+    const [isOpen, setIsOpen] = useState(true);
     return (
         <Fragment>
             <button
@@ -12,10 +12,15 @@ export default function ToolsButton() {
             >
                 tools
             </button>
-            {isOpen &&
-                <div className="toggleInputs">
-                </div>
-            }
+            <div id='toolsContainer'>
+                <input
+                    type="color"
+                    ref={colorPicker}
+                    id="colorPicker"
+                    className="palette"
+                    onChange={changeColor}
+                />
+            </div>
         </Fragment>
     )
 }
