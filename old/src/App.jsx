@@ -61,6 +61,7 @@ function App() {
 
   const [map, setMap] = useState(null);
   const [draw, setDraw] = useState(null);
+  const [drawMode, setDrawMode] = useState(null);
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
@@ -409,7 +410,7 @@ function App() {
       clearOnBlur: false,
     });
 
-    var draw = new MapboxDraw({
+    const draw = new MapboxDraw({
       userProperties: true,
       controls: {
         combine_features: false,
@@ -432,6 +433,11 @@ function App() {
 
           container.appendChild(mapContainer);
           sidebar[0].appendChild(container);
+
+          map.on('draw.modechange', function (e) {
+            setDrawMode(e.mode);
+            console.log(drawMode);
+          });
 
           return document.createElement('span');
       },
@@ -846,7 +852,7 @@ function App() {
                   setShowCadastre={setShowCadastre}
                   map={map}
               />
-              <ToolsButton draw={draw} colorPicker={colorPicker} changeColor={changeColor}/>
+              <ToolsButton drawMode={drawMode} colorPicker={colorPicker} changeColor={changeColor}/>
             </div>
             <div className="down-sidebar__buttons">
               <ResetMap
