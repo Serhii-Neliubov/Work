@@ -806,7 +806,6 @@ function App() {
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
-              <ToolsButton colorPicker={colorPicker} changeColor={changeColor}/>
               <OpenMapStyleButton
                   setShowCadastre={setShowCadastre}
                   setSelectedDistricts={setSelectedDistricts}
@@ -848,6 +847,8 @@ function App() {
                   setShowCadastre={setShowCadastre}
                   map={map}
               />
+              <ToolsButton colorPicker={colorPicker} changeColor={changeColor}/>
+
             </div>
             <div className="down-sidebar__buttons">
               <ResetMap

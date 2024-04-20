@@ -717,16 +717,6 @@ body {
   --myRightValue: 50%;
   --myOffset: -290px;
 }
-.mapboxgl-ctrl-group:not(:first-child) {
-  background: #0f293a;
-  box-shadow: none !important;
-  border: none;
-  height: 45px;
-  align-items: center;
-  position: absolute;
-  bottom: 15px;
-  right: calc(var(--myRightValue) + var(--myOffset));
-}
 .mapboxgl-ctrl-group:not(:first-child) button {
   padding: 25px !important;
   border: none !important;
@@ -1143,13 +1133,28 @@ p {
   margin-bottom: 15px;
   width: 360px;
 }
-.mapboxgl-ctrl {
-  position: absolute;
+.mapboxgl-ctrl-top-right {
+
+}
+
+.mapboxgl-ctrl-top-right > .mapboxgl-ctrl{
+  top: 0 !important;
+  right: 0 !important;
+  align-content: end !important;
+  align-items: flex-end !important;
+  background: #ffffff !important;
+}
+
+#toolsContainer > .mapboxgl-ctrl {
+  position: absolute !important;
   box-shadow: none !important;
   top: 0;
   left: 0;
   border-radius: 8px !important;
   background: none !important;
+}
+#toolsContainer > .mapboxgl-ctrl:last-child {
+  display: none;
 }
 .mapStyleButton_open::after {
   transform: rotate(90deg) !important;
@@ -1256,9 +1261,6 @@ p {
   margin-top: 2px;
   font-family: "Helvetica";
   font-weight: 700;
-}
-.mapboxgl-canvas-container .mapboxgl-ctrl .mapboxgl-user .mapboxgl-interactive:hover {
-  fill: black;
 }
 
 input[type="radio"] {
