@@ -1153,9 +1153,6 @@ p {
   border-radius: 8px !important;
   background: none !important;
 }
-#toolsContainer > .mapboxgl-ctrl:last-child {
-  display: none;
-}
 .mapStyleButton_open::after {
   transform: rotate(90deg) !important;
 }

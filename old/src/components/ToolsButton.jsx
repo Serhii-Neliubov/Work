@@ -1,13 +1,27 @@
-import {Fragment, useRef, useState} from "react";
+import {Fragment, useEffect, useRef, useState} from "react";
 
-export default function ToolsButton({colorPicker, changeColor}) {
+export default function ToolsButton({colorPicker, changeColor, draw}) {
+    const [currentMode, setCurrentMode] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const container = useRef();
 
-    // Use optional chaining to access container.current safely
     if (container.current) {
         container.current.style.display = isOpen ? "block" : "none";
     }
+
+    if(currentMode) {
+        console.log(currentMode)
+    }
+
+    useEffect(() => {
+        if(!draw) return;
+
+        setTimeout(() => {
+            setCurrentMode(draw);
+            console.log('draw', draw.getMode());
+        }, 1000)
+
+    }, [draw]);
 
     return (
         <Fragment>

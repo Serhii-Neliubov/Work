@@ -419,27 +419,26 @@ function App() {
       styles: defaultDrawStyles,
     });
 
-
     const drawAdapter = {
       onAdd: function (map){
           const container = document.getElementById("toolsContainer");
           const sidebar = document.getElementsByClassName("mainToggleButtons");
           const mapContainer = draw.onAdd(map);
 
+          const mapboxGL = container.getElementsByClassName('mapboxgl-ctrl-group');
+          if(mapboxGL.length){
+            container.removeChild(mapboxGL[0]);
+          }
+
           container.appendChild(mapContainer);
           sidebar[0].appendChild(container);
 
-          console.log(container);
-          console.log(mapContainer);
-
-          return sidebar;
+          return document.createElement('span');
       },
       onRemove: function (map){
         return draw.onRemove(map);
       },
     }
-
-    console.log(draw);
 
     function addLayerIfAbsent(map, layer) {
       if (!map.getLayer(layer.id)) {
@@ -847,8 +846,7 @@ function App() {
                   setShowCadastre={setShowCadastre}
                   map={map}
               />
-              <ToolsButton colorPicker={colorPicker} changeColor={changeColor}/>
-
+              <ToolsButton draw={draw} colorPicker={colorPicker} changeColor={changeColor}/>
             </div>
             <div className="down-sidebar__buttons">
               <ResetMap
