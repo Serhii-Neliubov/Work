@@ -14,7 +14,6 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { MAPBOX_DRAW_STYLES } from "@/assets/data/mapbox-draw-styles.ts";
 import {ColorPicker} from "@/components/color-picker/ColorPicker.tsx";
 import {Bg} from "@/components/ui/bg.tsx";
-import {Test} from "@/Test.tsx";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
@@ -62,12 +61,12 @@ function App() {
       visualizePitch: false,
     })
 
-    const customMarker = document.createElement('div');
-    customMarker.style.backgroundImage = `url(${pin})`;
-    customMarker.style.backgroundSize = 'cover';
-    customMarker.style.backgroundPosition = 'center';
-    customMarker.style.width = '27px';
-    customMarker.style.height = '41px';
+    // const customMarker = document.createElement('div');
+    // customMarker.style.backgroundImage = `url(${pin})`;
+    // customMarker.style.backgroundSize = 'cover';
+    // customMarker.style.backgroundPosition = 'center';
+    // customMarker.style.width = '27px';
+    // customMarker.style.height = '41px';
 
     map.addControl(MapGeocoder);
     map.addControl(MapDrawTools, 'top-right');
@@ -100,24 +99,25 @@ function App() {
           'line-width': 2, // Ширина линии
         }
       });
-      map.loadImage(
-        pin as string,
-        (error, image) => {
-          if (error) throw error;
-          if (!image) return; // handle undefined case
-          map.addImage('custom-marker', image);
-          map.addLayer({
-            id: 'point',
-            source: 'single-point',
-            type: 'symbol',
-            layout: {
-              'icon-image': 'custom-marker',
-              'icon-size': 0.5,
-              'icon-allow-overlap': true
-            },
-          });
-        }
-      );
+
+      // map.loadImage(
+      //   pin as string,
+      //   (error, image) => {
+      //     if (error) throw error;
+      //     if (!image) return; // handle undefined case
+      //     map.addImage('custom-marker', image);
+      //     map.addLayer({
+      //       id: 'point',
+      //       source: 'single-point',
+      //       type: 'symbol',
+      //       layout: {
+      //         'icon-image': 'custom-marker',
+      //         'icon-size': 0.5,
+      //         'icon-allow-overlap': true
+      //       },
+      //     });
+      //   }
+      // );
 
       MapGeocoder.on('result', (event) => {
         const source = map.getSource('single-point') as mapboxgl.GeoJSONSource;
@@ -202,7 +202,6 @@ function App() {
   return (
     <div className='w-screen relative bg-[#001524] overflow-hidden h-screen pt-[50px] pr-[50px] pb-[50px]'>
       <Bg />
-      <Test />
       <Sidebar map={map}/>
       <CalculationBox map={map} draw={draw}/>
       <ColorPicker draw={draw}/>

@@ -23,13 +23,6 @@ const SatelliteStyle = ({
     map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
     setMapStyleSetter(2);
 
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-    }
-
     dispatch(showCadastreFalse());
     dispatch(showTransportTrue());
     setSelectedDistricts([]);
@@ -46,7 +39,7 @@ const SatelliteStyle = ({
   };
 
   useEffect(() => {
-    if (mapStyleSetter == "2") {
+    if (mapStyleSetter === "2") {
       setToggleClass("switch-btn switch-on");
     } else {
       setToggleClass("switch-btn");

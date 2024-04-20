@@ -23,14 +23,6 @@ const MonochromeStyle = ({
 
     setMapStyleSetter(3);
 
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-
-      // Остальной код обработки карты также может быть здесь
-    }
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());

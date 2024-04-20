@@ -227,14 +227,12 @@ function App() {
     if (!map) return;
 
     if (!showCadastre && hoveredFeatureId) {
-      // Сбросьте стиль дома
       map.setPaintProperty(
         "custom-tileset-layer",
         "fill-color",
         "rgba(255,255,255,0)"
       );
 
-      // Установите состояние фичи в неактивное
       map.setFeatureState(
         {
           source: "custom-tileset-layer",
@@ -244,7 +242,6 @@ function App() {
         { hover: false }
       );
 
-      // Обнулите hoveredFeatureId
       setHoveredFeatureId(null);
     }
   }, [map, showCadastre, hoveredFeatureId]);
@@ -263,7 +260,6 @@ function App() {
       map.setFeatureState(featureState, { hover: false });
     };
   }, [map, hoveredFeatureId]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetLayerStyles = useCallback(() => {
     map.setPaintProperty("custom-tileset-line-layer", "line-color", [
       "match",
@@ -306,7 +302,6 @@ function App() {
               const updatedSelectedFeatures = [...selectedFeatures];
               updatedSelectedFeatures.splice(index, 1);
               setSelectedFeatures(updatedSelectedFeatures);
-              // Удаляем выбранный полигон из массива и восстанавливаем его стиль
               map.setFeatureState(
                 {
                   source: "custom-tileset-layer",
@@ -396,30 +391,12 @@ function App() {
     };
 
     let map = new mapboxgl.Map(mapSettings);
-    let imageData;
-    map.on("load", function () {
-      console.log(pin);
-      map.loadImage(
-          pin,
-          (error, image) => {
-            console.log(pin);
-            if (error) throw error;
-            if (!image) return;
-            imageData = image;
-            map.addImage('custom-marker', image);
-            // map.addLayer({
-            //   id: 'point',
-            //   source: 'single-point',
-            //   type: 'symbol',
-            // });
-          }
-      );
-    })
+    let imageElement = document.createElement("img");
+    imageElement.src = pin;
 
     map.on('styledata', function() {
-      if(!imageData) return;
       if(!map.hasImage('custom-marker')){
-        map.addImage('custom-marker', imageData);
+        map.addImage('custom-marker', imageElement);
       }
     });
 
@@ -490,7 +467,6 @@ function App() {
 
     const marker = document.getElementById("distance-marker");
     map.on("draw.delete", function () {
-      // Скрываем маркер при удалении линии
       document.getElementById("distance-marker").style.display = "none";
     });
 
