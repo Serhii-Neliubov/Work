@@ -396,7 +396,39 @@ function App() {
     };
 
     let map = new mapboxgl.Map(mapSettings);
+    let imageData;
+    map.on("load", function () {
+      console.log(pin);
+      map.loadImage(
+          pin,
+          (error, image) => {
+            console.log(pin);
+            if (error) throw error;
+            if (!image) return;
+            imageData = image;
+            map.addImage('custom-marker', image);
+            // map.addLayer({
+            //   id: 'point',
+            //   source: 'single-point',
+            //   type: 'symbol',
+            // });
+          }
+      );
+    })
+
+    map.on('styledata', function() {
+      if(!imageData) return;
+      if(!map.hasImage('custom-marker')){
+        map.addImage('custom-marker', imageData);
+      }
+    });
+
+    map.on('draw.modechange', function (e) {
+      setDrawMode(e.mode);
+    });
+
     setMap(map);
+
 
     let geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -433,11 +465,6 @@ function App() {
 
           container.appendChild(mapContainer);
           sidebar[0].appendChild(container);
-
-          map.on('draw.modechange', function (e) {
-            setDrawMode(e.mode);
-            console.log(drawMode);
-          });
 
           return document.createElement('span');
       },
@@ -668,29 +695,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    if (map) {
-      const customMarker = document.createElement('div');
-      customMarker.className = 'custom-marker';
-      customMarker.style.backgroundImage = `url(${pin})`;
-      customMarker.style.backgroundPosition = 'center';
-
-      map.loadImage(
-          pin,
-          (error, image) => {
-            if (error) throw error;
-            if (!image) return; // handle undefined case
-            map.addImage('custom-marker', image);
-            // map.addLayer({
-            //   id: 'point',
-            //   source: 'single-point',
-            //   type: 'symbol',
-            // });
-          }
-    );
-    }
-  }, [map]);
-
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
       dispatch(decentralisedToggleTrue());
@@ -701,13 +705,13 @@ function App() {
       setSelectedDistricts(allDistricts);
       toggleDistrictsVisibility(selectedDistricts, map);
 
-      if (mapStyleSetter == 1) {
+      if (mapStyleSetter === 1) {
         map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
         setShowCadastre(false);
-      } else if (mapStyleSetter == 2) {
+      } else if (mapStyleSetter === 2) {
         map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
         setShowCadastre(false);
-      } else if (mapStyleSetter == 3) {
+      } else if (mapStyleSetter === 3) {
         map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
         setShowCadastre(false);
       } else {
