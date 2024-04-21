@@ -10,7 +10,6 @@ export default function ToolsButton({colorPicker, changeColor, drawMode}) {
 
     return (
         <Fragment>
-            {drawMode}
             <button
                 className={`BrusselsButton BrusselsButton_bg ${
                     isOpen ? "BrusselsButton_open" : ""
@@ -27,6 +26,13 @@ export default function ToolsButton({colorPicker, changeColor, drawMode}) {
                     className="palette"
                     onChange={changeColor}
                 />
+                <div className='toolsButton_text'>
+                    <span style={drawMode === 'draw_line_string' ? {color: '#4cc0ad'} : {}}>Line Tool</span>
+                    <span style={drawMode === 'draw_polygon' ? {color: '#4cc0ad'} : {}}>Polygon Tool</span>
+                    <span style={drawMode === 'draw_point' ? {color: '#4cc0ad'} : {}}>Marker Tool</span>
+                    <span>Trash Tool</span>
+                    <span>Color Tool</span>
+                </div>
             </div>
         </Fragment>
     )

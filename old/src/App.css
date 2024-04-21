@@ -819,6 +819,7 @@ body {
 .palette {
   margin-top: 200px;
   height: 45px;
+  width: 100%;
   background: none;
   border: none;
   cursor: pointer;
@@ -830,11 +831,11 @@ body {
   left: 0;
   position: absolute;
   z-index: 10;
-  border-radius: 100%;
   width: 100%;
   height: 100%;
   background-image: url("./assets/images/iconPalette.png");
-  background-position: center;
+  background-position: left;
+  margin-left: 15px;
   background-repeat: no-repeat;
 }
 
@@ -1133,8 +1134,19 @@ p {
   margin-bottom: 15px;
   width: 360px;
 }
-.mapboxgl-ctrl-top-right {
-
+.toolsButton_text{
+  display: flex;
+  top: 17px;
+  left: 60px;
+  gap: 35px;
+  flex-direction: column;
+  position: absolute;
+}
+.toolsButton_text > span{
+  font-family: "Helvetica";
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
 }
 
 .mapboxgl-ctrl-top-right > .mapboxgl-ctrl{
@@ -1151,10 +1163,34 @@ p {
   top: 0;
   left: 0;
   border-radius: 8px !important;
-  background: none !important;
+  width: 100%;
+  background: none;
+}
+#toolsContainer > .mapboxgl-ctrl > .mapbox-gl-draw_ctrl-draw-btn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start !important;
+  align-items: start !important;
+}
+
+.mapbox-gl-draw_line{
+  background-position: left;
+  margin-left: 18px;
+}
+.mapbox-gl-draw_polygon{
+    background-position: left;
+    margin-left: 18px;
+}
+.mapbox-gl-draw_point{
+    background-position: left;
+    margin-left: 10px;
 }
 .mapStyleButton_open::after {
   transform: rotate(90deg) !important;
+}
+.mapbox-gl-draw_trash{
+  background-position: left;
+  margin-left: 17px;
 }
 .BrusselsButton_bg {
   background: rgba(76, 192, 173, 0.6);
