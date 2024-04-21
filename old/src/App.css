@@ -794,17 +794,6 @@ body {
 .switch-on::after {
   left: 21px;
 }
-.logo-map {
-  position: absolute;
-  top: 20px; /* Установите желаемый отступ сверху */
-  left: 20px; /* Установите желаемый отступ справа */
-  width: 130px; /* Установите желаемую ширину */
-  background-image: url("./assets/images/logo.png"); /* Путь к вашему логотипу */
-  background-size: cover;
-  background-repeat: no-repeat;
-  z-index: 1000;
-}
-
 .line-palette {
   position: absolute;
   top: 50%;
@@ -882,9 +871,6 @@ body {
   flex-direction: column;
 }
 
-.logo-map {
-  display: none;
-}
 input[type="color"]::-webkit-color-swatch {
   display: none;
 }

@@ -25,8 +25,6 @@ import {
   createMarkerElement,
 } from "./utils/MapFunctions";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu.jsx";
-import RightTopMenuText from "./components/RightTopMenuText.jsx";
-// import MyModal from "./components/MyModal/MyModal";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
@@ -64,10 +62,8 @@ function App() {
   const [drawMode, setDrawMode] = useState(null);
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
-  const activeSidebar = useSelector((state) => state.activeSidebar.value);
   const [showCadastre, setShowCadastre] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
-  const [showCircleMenu, setShowCircleMenu] = useState(true);
 
   const isCentralisedDistrictsVisible = useSelector(
     (state) => state.centralisedDistrictsVisible.value
@@ -80,13 +76,10 @@ function App() {
   );
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
-  const circleMenu = useRef();
-  const mapTag = useRef();
   const colorPicker = useRef();
   const geocoderContainer = useRef();
   const newDrawFeature = useRef(false);
   const sidebarButton = useRef();
-  const circleMenuTool = document.querySelector(".circleMenuTool");
   const sidebar = useRef();
   const allDistricts = [
     "SW",
@@ -455,12 +448,7 @@ function App() {
         map.addLayer(layer);
       }
     }
-    map.on("move", function () {
-      addLayerIfAbsent(map, customTilesetLayer);
-      addLayerIfAbsent(map, customTilesetLineLayer);
-    });
-
-    map.on("style.load", function () {
+    map.on("styledata", function () {
       addLayerIfAbsent(map, customTilesetLayer);
       addLayerIfAbsent(map, customTilesetLineLayer);
     });
@@ -485,7 +473,6 @@ function App() {
       if (!newDrawFeature.current) {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
-        //if another drawFeature is not found - reset drawFeatureID
         MAPBOX_ACCESS_TOKEN.current = drawFeatureAtPoint.length
           ? drawFeatureAtPoint[0]
           : "";
@@ -493,7 +480,6 @@ function App() {
           var clickedFeature = draw.get(drawFeatureAtPoint[0]);
           showPolygonArea(clickedFeature);
         } else {
-          // Если фигура не была найдена, сбросьте отображение размера
           setSqml(0);
         }
       }
@@ -502,17 +488,14 @@ function App() {
     });
 
     map.on("click", "0", function (e) {
-      const clickedPolygon = e.features[0]; // Получаем информацию о кликнутом полигоне
-      // Вызываем функцию для отображения метров полигона
+      const clickedPolygon = e.features[0];
       showPolygonArea(clickedPolygon);
     });
 
     function showPolygonArea(polygonFeature) {
-      // eslint-disable-next-line no-undef
       const area = turf.area(polygonFeature.geometry);
       const sqm = Math.round(area * 100) / 100;
 
-      // Выводим метры полигона в какой-либо элемент (например, модальное окно)
       setSqml(sqm);
     }
 
@@ -521,17 +504,13 @@ function App() {
       const feature = e.features[0];
 
       if (feature.geometry.type === "LineString") {
-        // Если рисуется линия
-        // eslint-disable-next-line no-undef
         const distance = turf.length(feature);
 
-        let displayedDistance; // Исходное значение для отображения
+        let displayedDistance;
 
         if (distance < 1000) {
-          // Если расстояние меньше 1000 метров, умножаем его на 1000 и отображаем как целое число
           displayedDistance = Math.round(distance * 1000).toString();
         } else {
-          // Иначе отображаем значение в метрах с двумя знаками после запятой
           displayedDistance =
             distance.toLocaleString(undefined, { minimumFractionDigits: 2 }) +
             " m";
@@ -549,14 +528,12 @@ function App() {
         marker.style.top = `${map.project(markerPosition).y}px`;
         marker.style.display = "block";
       } else if (feature.geometry.type === "Polygon") {
-        // Если рисуется полигон, устанавливаем флаг drawingCompleted в false
         drawingCompleted = false;
       }
 
       newDrawFeature.current = true;
       updateArea(e);
 
-      // Закрываем полигон при двойном клике
       map.once("dblclick", function (dblClickEvt) {
         if (drawingCompleted) {
           const featuresAtClick = map.queryRenderedFeatures(dblClickEvt.point);
@@ -574,7 +551,6 @@ function App() {
       const feature = e.features[0];
 
       if (feature.geometry.type === "Polygon") {
-        // Если рисование полигона завершено, устанавливаем флаг drawingCompleted в true
         drawingCompleted = true;
       }
     });
@@ -591,36 +567,30 @@ function App() {
 
     map.on("draw.delete", function () {
       newDrawFeature.current = true;
-      setSqml(0); // Сбрасываем размер при удалении фигуры
+      setSqml(0);
     });
 
     map.on("draw.update", function (e) {
       const updatedFeature = e.features[0];
 
       if (updatedFeature.geometry.type === "LineString") {
-        // eslint-disable-next-line no-undef
         const distance = turf
           .length(updatedFeature)
           .toFixed(3)
           .toLocaleString(undefined, { minimumFractionDigits: 2 });
 
-        // Получаем координаты второй точки линии
         const secondPointCoord = updatedFeature.geometry.coordinates[1];
 
-        // Определяем позицию меню
         const menuPosition = new mapboxgl.LngLat(
           secondPointCoord[0],
           secondPointCoord[1]
         );
 
-        // Обновляем текст в меню и позиционируем его
         if (distance < 1000) {
-          // Если расстояние меньше 1000 метров, умножаем его на 1000 и отображаем как целое число
           document.getElementById("distance-value").textContent = `${(
             distance * 1000
           ).toFixed(0)} m`;
         } else {
-          // Иначе отображаем значение в метрах с двумя знаками после запятой
           document.getElementById(
             "distance-value"
           ).textContent = `${distance} m`;
@@ -629,8 +599,6 @@ function App() {
         marker.style.left = `${map.project(menuPosition).x}px`;
         marker.style.top = `${map.project(menuPosition).y}px`;
       } else if (updatedFeature.geometry.type === "Polygon") {
-        // Calculate the area of the updated polygon
-        // eslint-disable-next-line no-undef
         const area = turf.area(updatedFeature.geometry);
         const sqm = Math.round(area * 100) / 100;
         setSqml(sqm);
@@ -643,7 +611,6 @@ function App() {
     function updateArea(e) {
       const selectedFeature = e.features[0];
       if (selectedFeature) {
-        // eslint-disable-next-line no-undef
         const area = turf.area(selectedFeature.geometry);
         const sqm = Math.round(area * 100) / 100;
         setSqml(sqm);
@@ -658,14 +625,12 @@ function App() {
   function changeColor() {
     let selectedColor = colorPicker.current.value;
     if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
-      // Установите выбранный цвет для выбранной фигуры
       draw.setFeatureProperty(
         MAPBOX_ACCESS_TOKEN.current,
         "portColor",
         selectedColor
       );
 
-      // Обновите фигуру на карте
       let feat = draw.get(MAPBOX_ACCESS_TOKEN.current);
       draw.add(feat);
     }
@@ -755,21 +720,6 @@ function App() {
     }
   }
 
-  function circleToggleMenu() {
-    setShowCircleMenu(!showCircleMenu);
-    if (showCircleMenu) {
-      circleMenuTool.style.display = "flex";
-    } else {
-      circleMenuTool.style.display = "none";
-    }
-  }
-
-  useEffect(() => {
-    if (map) {
-      map.resize(); // Обновите размеры карты
-    }
-  }, [activeSidebar, map]);
-
   return (
     <Fragment>
       {showLoader &&
@@ -781,7 +731,7 @@ function App() {
         <button
             ref={sidebarButton}
             className="activeSidebar"
-          onClick={toggleSidebar}
+            onClick={toggleSidebar}
         />
 
         <div ref={sidebar} className="sidebar">
@@ -839,43 +789,35 @@ function App() {
                   setSelectedFeatures={setSelectedFeatures}
                   mapStyleSetter={mapStyleSetter}
                   setSqml={setSqml}
-                draw={draw}
-                map={map}
-                setShowCadastre={setShowCadastre}
-                removeCustomMarker={removeCustomMarker}
-                setSelectedDistricts={setSelectedDistricts}
+                  draw={draw}
+                  map={map}
+                  setShowCadastre={setShowCadastre}
+                  removeCustomMarker={removeCustomMarker}
+                  setSelectedDistricts={setSelectedDistricts}
               ></ResetMap>
 
-              <PrintScreen />
+              <PrintScreen/>
             </div>
           </div>
         </div>
 
         <div
-          id="map"
-          ref={mapTag}
-          style={{
-            flex: 1,
-            position: "relative",
-          }}
-        >
-          <div id="distance-marker" className="distance-marker">
-            <div id="distance-value"></div>
-            <div className="distance-close" id="distance-close">
-              ×
-            </div>
+            id="map"
+            style={{
+              flex: 1,
+              position: "relative",
+            }}
+        />
+
+        <div id="distance-marker" className="distance-marker">
+          <div id="distance-value"></div>
+          <div className="distance-close" id="distance-close">
+            ×
           </div>
-          <RightTopMenuText />
-          <div className="calculation-box">
-            <div id="calculated-area">{Sqm}.SQM</div>
-          </div>
-          <div
-            ref={circleMenu}
-            onClick={circleToggleMenu}
-            className="circleMenu"
-            alt="logo"
-          />
-          <img alt="Logo" className="logo-map" src={logo} />
+        </div>
+
+        <div className="calculation-box">
+          <div id="calculated-area">{Sqm}.SQM</div>
         </div>
       </Container>
     </Fragment>

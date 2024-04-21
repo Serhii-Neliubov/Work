@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useRef, useState} from "react";
+import {Fragment, useRef, useState} from "react";
 
 export default function ToolsButton({colorPicker, changeColor, drawMode}) {
     const [isOpen, setIsOpen] = useState(false);
