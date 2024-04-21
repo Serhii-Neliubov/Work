@@ -15,6 +15,7 @@ import { decentralisedDistrictsVisibleTrue } from "../redux/slices/decentralised
 import { centralisedToggleFalse } from "../redux/slices/centralisedToggleSlice";
 import { decentralisedToggleFalse } from "../redux/slices/decentralisedToggleSlice";
 import { allDistrictsToggleFalse } from "../redux/slices/allDistrictsToggleSlice";
+
 const ResetMap = ({
   map,
   removeCustomMarker,
@@ -66,8 +67,8 @@ const ResetMap = ({
     } else {
       map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     }
-    // Сбрасываем видимость надписей в боковой панели
-    var sidebarLabels = document.querySelectorAll(".sidebar-label");
+
+    const sidebarLabels = document.querySelectorAll(".sidebar-label");
     sidebarLabels.forEach(function (label) {
       label.classList.remove("hidden");
     });

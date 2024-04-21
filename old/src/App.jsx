@@ -51,7 +51,7 @@ import {
 import Container from "./components/Container.jsx";
 import OpenTranportButton from "./components/ToggleMenu/OpenTranportButton.jsx";
 import OpenCadastreButton from "./components/ToggleMenu/OpenCadastreButton.jsx";
-import OpenMapStyleButton from "./components/ToggleMenu/OpenMapStyleButton.jsx";
+import MapStyle from "./components/ToggleMenu/MapStyle.jsx";
 import ToolsButton from "./components/ToolsButton.jsx";
 
 function App() {
@@ -733,7 +733,6 @@ function App() {
             className="activeSidebar"
             onClick={toggleSidebar}
         />
-
         <div ref={sidebar} className="sidebar">
           <div className="logo">
             <img src={logo} alt='Image'/>
@@ -741,13 +740,7 @@ function App() {
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
-              <OpenMapStyleButton
-                  setShowCadastre={setShowCadastre}
-                  setSelectedDistricts={setSelectedDistricts}
-                  map={map}
-                  mapStyleSetter={mapStyleSetter}
-                  setMapStyleSetter={setMapStyleSetter}
-              />
+              <MapStyle map={map} />
               <button
                   onClick={() => dispatch(openBrusselsChanging())}
                   className={`BrusselsButton BrusselsButton_bg ${
@@ -756,7 +749,7 @@ function App() {
               >
                 Brussels
               </button>
-              {openBrussels ? (
+              {openBrussels && (
                   <div className="toggleContainer">
                     <ToggleMenu
                         toggleButton={toggleButton}
@@ -775,7 +768,7 @@ function App() {
                       All Districts
                     </AllDistrictsButton>
                   </div>
-              ) : null}
+              )}
               <OpenTranportButton map={map}/>
               <OpenCadastreButton
                   showCadastre={showCadastre}
@@ -794,9 +787,8 @@ function App() {
                   setShowCadastre={setShowCadastre}
                   removeCustomMarker={removeCustomMarker}
                   setSelectedDistricts={setSelectedDistricts}
-              ></ResetMap>
-
-              <PrintScreen/>
+              />
+              <PrintScreen />
             </div>
           </div>
         </div>
